@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 import CalendarHeatmap from "react-calendar-heatmap";
+import { FaUserNinja } from 'react-icons/fa';
 import "react-calendar-heatmap/dist/styles.css";
+import "react-responsive-modal/styles.css";
+import { Modal } from "react-responsive-modal";
+import "./App.css"
 
 const ProgressTracker = () => {
   const [progressData, setProgressData] = useState([]);
@@ -56,6 +60,10 @@ const ProgressTracker = () => {
 };
 
 const App = () => {
+
+  const [open, setOpen] = useState(false);
+  const [apiKey, setApiKey] = useState("");
+
   const [question, setQuestion] = useState(`
     <div>
       <h1>Counter</h1>
@@ -76,7 +84,54 @@ const App = () => {
     console.log("Submitted code:", code);
   };
 
+  const onOpenModal = () => setOpen(true);
+  const onCloseModal = () => {
+    setApiKey("");
+    setOpen(false)
+  };
+
+  const handleApiKeySubmit = async (e) => {
+    e.preventDefault();
+    console.log("API Key:", apiKey);
+  }
+
   return (
+    <>
+    <nav
+      style={{
+        display: "flex",
+        background: "#272727",
+        justifyContent: "space-between",
+        padding: "20px 50px 0px 50px",
+      }}
+    >
+      <div 
+        style={{ 
+          color: "white",
+          fontSize: "30px",
+          display: "flex",
+        }}
+      >
+        Stack Ninja
+        <FaUserNinja style={{padding: "5px", color: '#70b1a1'}}/>
+      </div>
+      <div>
+        <button
+            onClick={onOpenModal}
+            style={{
+              backgroundColor: "#70b1a1",
+              color: "white",
+              border: "none",
+              padding: "10px 20px",
+              borderRadius: "10px",
+              cursor: "pointer",
+              fontSize: "15px",
+            }}
+          >
+            ChatGPT API Keys
+          </button>
+      </div>
+    </nav>
     <div
       style={{
         display: "flex",
@@ -140,6 +195,77 @@ const App = () => {
         <ProgressTracker />
       </div>
     </div>
+    <Modal 
+      open={open} 
+      onClose={onCloseModal} 
+      center 
+      classNames={{
+        overlay: 'customOverlay',
+        modal: 'customModal',
+      }}>
+      <form 
+        onSubmit={handleApiKeySubmit} 
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          padding: "20px",
+        }}
+      >
+        <h2 
+          style={{
+            margin: "auto",
+            padding: "10px",
+          }}
+        >
+          Enter Your ChatGPT API Key
+        </h2>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "10px",
+            margin: "auto",
+            padding: "10px",
+          }}
+        >
+          <input 
+            type="text"  
+            id="apiKey"
+            value={apiKey}
+            onChange={(e) => setApiKey(e.target.value)}
+            placeholder="Enter key..."
+            style={{
+              display: "flex",
+              paddingTop: "0.5rem",
+              paddingBottom: "0.5rem",
+              paddingRight: "0.75rem",
+              paddingLeft: "1rem",
+              backgroundColor: "#ffffff",
+              borderRadius: "0.375rem",
+              borderWidth: "1px",
+              boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+            }}
+          />
+          <button 
+            type="submit"
+            disabled={apiKey === ""}
+            style={{
+              backgroundColor: "#70b1a1",
+              color: "white",
+              border: "none",
+              padding: "10px 20px",
+              borderRadius: "5px",
+              cursor: "pointer",
+              fontSize: "15px",
+            }}  
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </Modal>
+    </>
   );
 };
 

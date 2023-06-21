@@ -118,3 +118,12 @@
 .react-calendar-heatmap .color-gitlab-4 {
   fill: #254e77;
 }
+
+.customOverlay {
+  background: rgba(20, 70, 91, 0.7);
+}
+.customModal {
+  background: #fff;
+  max-width: 500px;
+  width: 100%;
+}
